@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Visuales Bulk Downloader",
+  "description": "Descarga todos los capitulos de una carpeta de una serie de visuales",
+  "version": "1.0",
+  "action": {
+    "default_popup": "hello.html",
+    "default_icon": "assets/chad_face.png"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "src/downloads/styles/global.js",
+        "src/downloads/utils/regex.js",
+        "src/downloads/download.js"
+      ],
+      "module": true,
+      "matches": [
+        "https://visuales.uclv.cu/*"
+      ]
+    }
+  ]
+}
