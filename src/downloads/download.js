@@ -16,7 +16,7 @@ const allThumbnails = [...allLinkElements].filter((a) => detectPhotoFilesRegex.t
 // Get metadata
 const filesToDownload = allLinksToDownload.map((link) => link.href);
 const fileNamesToDownload = allLinksToDownload.map((link) => {
-  return { name: link.textContent, isSelected: false };
+  return { name: link.textContent, isSelected: false, link: link.href };
 });
 
 // Render Thumbnails
@@ -53,6 +53,8 @@ downloadButton.classList.add("download-button");
 downloadButton.textContent = "📥";
 document.body.appendChild(downloadButton);
 
+downloadButton.addEventListener("click", startDownloads);
+
 // Download View
 const itemsView = document.createElement("div");
 itemsView.classList.add("items-view");
@@ -83,4 +85,9 @@ if (filesToDownload.length > 0) {
   pageTitle.insertAdjacentElement("afterend", selectAllButton);
   document.querySelector("table").remove();
   renderView();
+}
+
+function startDownloads() {
+  const downloads = fileNamesToDownload.filter((file) => file.isSelected);
+  chrome.runtime.sendMessage({ action: "download", downloads: downloads });
 }

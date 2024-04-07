@@ -1,11 +1,16 @@
 {
   "manifest_version": 3,
   "name": "Visuales Bulk Downloader",
+  "permissions": ["downloads", "downloads.shelf"],
   "description": "Descarga todos los capitulos de una carpeta de una serie de visuales",
   "version": "1.0",
   "action": {
     "default_popup": "hello.html",
     "default_icon": "assets/chad_face.png"
+  },
+  "background": {
+    "service_worker": "src/downloads/background.js",
+    "type": "module"
   },
   "content_scripts": [
     {
