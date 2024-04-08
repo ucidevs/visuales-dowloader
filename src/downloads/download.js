@@ -89,5 +89,5 @@ if (filesToDownload.length > 0) {
 
 function startDownloads() {
   const downloads = fileNamesToDownload.filter((file) => file.isSelected);
-  chrome.runtime.sendMessage({ action: "download", downloads: downloads });
+  chrome.runtime.sendMessage({ action: "download", downloads: downloads, path: "" });
 }

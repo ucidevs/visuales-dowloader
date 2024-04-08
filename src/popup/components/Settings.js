@@ -9,11 +9,20 @@ export default class Settings extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    //   if (name === "active") this.render();
+    
   }
 
   connectedCallback() {
     this.render();
+
+    this.shadowRoot.querySelectorAll("x-switch").forEach((element) => {
+      element.addEventListener("change", (event) => {
+        console.log(event.detail.value);
+        event.detail.value === true
+          ? element.setAttribute("active", "")
+          : element.removeAttribute("active");
+      });
+    });
   }
 
   render() {
