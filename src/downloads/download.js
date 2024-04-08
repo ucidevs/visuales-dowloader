@@ -1,44 +1,80 @@
+/** Diccionario que contiene un items que se va a descargar
+ * @typedef {Object} DownloadItem
+ * @property {string} name - Nombre del archivo de video
+ * @property {boolean} isSelected - Está o no seleccionado
+ * @property {string} link - URL del item
+ */
+
 // Define Styles
 const styles = document.createElement("style");
 styles.textContent = globalStyles;
 document.head.appendChild(styles);
 
-// Utils
-const pageTitle = document.querySelector("h1");
-const currentURL = window.location.href;
+/* --------------------- Insert UI Elements in DOM --------------------- */
+
+// Download Button
+const downloadButton = document.createElement("button");
+downloadButton.classList.add("download-button");
+downloadButton.textContent = "📥";
+downloadButton.style.display = "none";
+document.body.appendChild(downloadButton);
+downloadButton.addEventListener("click", startDownloads);
+
+// Select All Button
+const selectAllButton = document.createElement("button");
+selectAllButton.textContent = "✅ Seleccionar todos";
+
+// Download View
+const itemsView = document.createElement("div");
+itemsView.classList.add("items-view");
+
+/* --------------------- Get Data from page --------------------- */
 
 // Get Elements from Page
+const pageTitle = document.querySelector("h1");
 const allLinkElements = document.querySelectorAll("a");
-const allLinksToDownload = [...allLinkElements].filter((a) => detectVideoFilesRegex.test(a.href));
+
+// Filter All Links
+const allVideoLinksToDownload = [...allLinkElements].filter((a) =>
+  detectVideoFilesRegex.test(a.href)
+);
 const allSubsToDownload = [...allLinkElements].filter((a) => detectSubtitlesRegex.test(a.href));
 const allThumbnails = [...allLinkElements].filter((a) => detectPhotoFilesRegex.test(a.href));
 
-// Get metadata
-const filesToDownload = allLinksToDownload.map((link) => link.href);
-const fileNamesToDownload = allLinksToDownload.map((link) => {
+// Get URLs from filtered video Link Elements
+const itemsToDownload = allVideoLinksToDownload.map((link) => link.href);
+
+/** List of Downloaded items
+ * @type {DownloadItem[]}
+ */
+const fileNamesToDownload = allVideoLinksToDownload.map((link) => {
   return { name: link.textContent, isSelected: false, link: link.href };
 });
 
-// Render Thumbnails
-allThumbnails.forEach((thumbnail) => {
-  const imageURL = thumbnail.href;
-  const image = document.createElement("img");
-  image.src = imageURL;
-  image.style.borderRadius = "20px";
-  image.style.width = "300px";
-  thumbnail.parentNode.replaceChild(image, thumbnail);
-});
+/* --------------------- UI Logic --------------------- */
 
+// Render Thumbnails
+function renderAllThumbnails() {
+  allThumbnails.forEach((thumbnail) => {
+    const imageURL = thumbnail.href;
+    const image = document.createElement("img");
+    image.src = imageURL;
+    image.style.borderRadius = "20px";
+    image.style.width = "300px";
+    thumbnail.parentNode.replaceChild(image, thumbnail);
+  });
+}
+
+/**
+ * Maneja la selección de un DownloadItem
+ * @param {MouseEvent} event - El evento de clic.
+ */
 function selectElement(event) {
   const index = event.target.getAttribute("index");
-  console.log("Index", index);
   if (index === null || index === undefined) return;
   fileNamesToDownload[index].isSelected = !fileNamesToDownload[index].isSelected;
   renderView();
 }
-
-const selectAllButton = document.createElement("button");
-selectAllButton.textContent = "✅ Seleccionar todos";
 
 selectAllButton.onclick = () => {
   if (fileNamesToDownload.some((file) => file.isSelected === true))
@@ -47,21 +83,9 @@ selectAllButton.onclick = () => {
   renderView();
 };
 
-// Download Button
-const downloadButton = document.createElement("button");
-downloadButton.classList.add("download-button");
-downloadButton.textContent = "📥";
-downloadButton.style.display = "none";
-document.body.appendChild(downloadButton);
-
-downloadButton.addEventListener("click", startDownloads);
-
-// Download View
-const itemsView = document.createElement("div");
-itemsView.classList.add("items-view");
-
 function renderView() {
-  console.log("Rendering...");
+
+  // render HTML for Items to Download
   const itemsToDownload = fileNamesToDownload.map(
     (link, index) => /*html*/ `<div class="download-item ${
       link.isSelected === true ? "checked" : ""
@@ -72,22 +96,30 @@ function renderView() {
   );
   itemsView.innerHTML = itemsToDownload.join("");
 
+  // Set all events
   document.querySelectorAll(".download-item").forEach((item) => {
     item.addEventListener("click", selectElement);
   });
 
+  // Render or not the download button
   if (fileNamesToDownload.some((file) => file.isSelected === true))
     downloadButton.style.display = "block";
   else downloadButton.style.display = "none";
 }
 
-if (filesToDownload.length > 0) {
+// Check for videos and render Custom View
+if (itemsToDownload.length > 0) {
   pageTitle.insertAdjacentElement("afterend", itemsView);
   pageTitle.insertAdjacentElement("afterend", selectAllButton);
   document.querySelector("table").remove();
   renderView();
 }
 
+/* --------------------- Start Downloads --------------------- */
+
+/**
+ * Envía al service worker los datos del archivo a descargar
+ */
 function startDownloads() {
   const downloads = fileNamesToDownload.filter((file) => file.isSelected);
   const URL = document.querySelector("h1").textContent.split("/");
