@@ -3,7 +3,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     chrome.downloads.download(
       {
         url: download.link,
-        filename: download.name,
+        filename: `${request.path}/${download.name}`,
       },
       (downloadId) => console.log("Descarga iniciada:", downloadId)
     );

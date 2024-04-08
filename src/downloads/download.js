@@ -51,6 +51,7 @@ selectAllButton.onclick = () => {
 const downloadButton = document.createElement("button");
 downloadButton.classList.add("download-button");
 downloadButton.textContent = "📥";
+downloadButton.style.display = "none";
 document.body.appendChild(downloadButton);
 
 downloadButton.addEventListener("click", startDownloads);
@@ -89,5 +90,7 @@ if (filesToDownload.length > 0) {
 
 function startDownloads() {
   const downloads = fileNamesToDownload.filter((file) => file.isSelected);
-  chrome.runtime.sendMessage({ action: "download", downloads: downloads, path: "" });
+  const URL = document.querySelector("h1").textContent.split("/");
+  const path = URL.pop();
+  chrome.runtime.sendMessage({ action: "download", downloads: downloads, path });
 }
