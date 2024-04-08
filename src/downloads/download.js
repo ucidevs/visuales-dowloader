@@ -28,6 +28,10 @@ selectAllButton.textContent = "✅ Seleccionar todos";
 const itemsView = document.createElement("div");
 itemsView.classList.add("items-view");
 
+// Extension message
+const address = document.querySelector("address");
+address.textContent = "⚡ Powered by 📥 Visuales Bulk Downloader"
+
 /* --------------------- Get Data from page --------------------- */
 
 // Get Elements from Page

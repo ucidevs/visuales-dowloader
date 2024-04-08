@@ -6,7 +6,7 @@
   "version": "1.0",
   "action": {
     "default_popup": "popup.html",
-    "default_icon": "assets/chad_face.png"
+    "default_icon": "assets/extension_icon.png"
   },
   "background": {
     "service_worker": "src/downloads/background.js",
