@@ -125,4 +125,8 @@ button:active {
     margin-top: 20px;
 }
 
+.subtitle {
+  font-family: monospace;
+  font-size: 12pt;
+}
 `;

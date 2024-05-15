@@ -24,6 +24,11 @@ downloadButton.addEventListener("click", startDownloads);
 const selectAllButton = document.createElement("button");
 selectAllButton.textContent = "✅ Seleccionar todos";
 
+// Videos in this file Title
+const videosInThisFileTitle = document.createElement("h4");
+videosInThisFileTitle.textContent = "📺 Videos en esta carpeta:"
+videosInThisFileTitle.classList.add("subtitle");
+
 // Download View
 const itemsView = document.createElement("div");
 itemsView.classList.add("items-view");
@@ -121,7 +126,8 @@ function renderView() {
 if (urlsToDownload.length > 0) {
   pageTitle.insertAdjacentElement("afterend", itemsView);
   pageTitle.insertAdjacentElement("afterend", selectAllButton);
-  document.querySelector("table").remove();
+  pageTitle.insertAdjacentElement("beforeend", videosInThisFileTitle);
+  // document.querySelector("table").remove();
   renderView();
 }
 
