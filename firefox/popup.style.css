@@ -1,0 +1,25 @@
+h1 {
+    white-space: nowrap;
+}
+
+p {
+    font-size: medium;
+}
+
+.callout {
+    padding: 10px;
+    background-color: hsl(57, 100%, 65%);
+    border: 1px solid hsl(34, 100%, 39%);
+}
+
+.callout p {
+    font-size: small;
+}
+
+code {
+    font-size: larger;
+}
+
+hr {
+    background-color: transparent;
+}

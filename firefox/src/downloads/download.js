@@ -136,12 +136,12 @@ if (urlsToDownload.length > 0) {
 /**
  * Envía al service worker los datos del archivo a descargar
  */
-function startDownloads() {
+async function startDownloads() {
   const downloads = itemsToDownload.filter((file) => file.isSelected);
   const URL = document.querySelector("h1").textContent.split("/");
   const path = URL.pop();
-  chrome.runtime.sendMessage({ action: "download", downloads: downloads, path });
+  await browser.runtime.sendMessage({ action: "download", downloads: downloads, path });
   if (confirm("¿Desea descargar los subtítulos?")) {
-    chrome.runtime.sendMessage({ action: "download", downloads: subsItemsForDownload, path });
+    await browser.runtime.sendMessage({ action: "download", downloads: subsItemsForDownload, path });
   }
 }
